@@ -96,7 +96,9 @@ attach() {
 
 stop() {
   local path="${1:-.}"
-  devcontainer stop --workspace-folder "$path"
+  local id
+  id=$(docker ps -q --filter "label=devcontainer.local_folder=$(cd "$path" && pwd)")
+  [[ -n "$id" ]] && docker stop "$id"
 }
 
 case "${1:-}" in
